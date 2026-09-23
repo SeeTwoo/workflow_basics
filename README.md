@@ -1,130 +1,114 @@
-# workflow_basics
+# 🛠️ Workflow Basics: Neovim & GDB
 
-*vim/neovim*
+A quick reference guide for editing with **(Neo)vim** and debugging with **GDB**.
 
-    Vim/Neovim has modes, three most basic ones are Normal, Insert and Command. While Insert is the expected behaviour of a text editor (key is pressed, something appears), it should be used very sparsely in small surgical strikes. Everything else, deleting, copying, pasting, moving the cursor around, and more, should be done from the other modes. The default one is Normal
+---
 
-    Normal mode can be reached from pretty much anywhere by pressing the <ESC> key (escape key, not E, then S, then C)
-    In Normal mode, keys can move the cursor 
-    
-    h,j,k and l allow to go respectively left, down, up and right
-    _   moves to the first non whitespace (space, tab, newline...) character of the line
-    w   moves to the next word
-    e   moves to the end of the next word
-    b   moves to the previous word
-    gg  moves to the top of the file (lots of action can also be performed with a combination of keys !)
-    G   moves to the bottom of the file
-    typing a number N followed by gg goes to the Nth line. e.g. 21gg goes to line 21.
+## Table of Contents
+- [Vim & Neovim](#-vim--neovim)
+  - [The Concept of Modes](#the-concept-of-modes)
+  - [Normal Mode: Moving Around](#1-moving-around-motions)
+  - [Normal Mode: Editing Actions](#2-editing-actions-operators)
+  - [The Magic: Verb + Motion](#3-the-magic-combining-actions--motions)
+  - [Entering Insert Mode](#entering-insert-mode)
+  - [Command Mode](#command-mode-)
+  - [Configuration](#configuration)
+- [GDB (GNU Debugger)](#-gdb-gnu-debugger)
+  - [Compiling for Debugging](#1-compiling-for-debugging)
+  - [Launching GDB](#2-launching-gdb)
+  - [Essential GDB Commands](#3-essential-commands)
+  - [Understanding `step` vs `next`](#step-vs-next-example)
 
-    keys can also do actions
+---
 
-    d   to delete
-    y   to yank (copy)
-    p   to paste
-    c   to change (delete and then enter insert mode)
+## 🟢 Vim & Neovim
 
-    hitting an action twice applies it to the current line
+Vim is built around **modes**. The three most important are:
+1. **Normal mode** (Default): Where you navigate, delete, copy, and manipulate text.
+2. **Insert mode**: Where typing keys actually writes text to the buffer (like a regular text editor).
+3. **Command mode**: Where you issue instructions to the editor (saving, quitting, searching).
 
-    dd  deletes the current line
-    yy  copies the current line
-    cc  changes the current line
+> [!TIP]
+> Treat Insert mode like a **surgical strike**: jump in, type the text you need, and press <kbd>Esc</kbd> immediately to go back to Normal mode.
 
-    the actions also combine with the motion, making this system extremely powerful and ergonomic
+---
 
-    dw deletes till the next word
-    d3gg deletes everything from the line the cursor is currently on until the 3rd line (works with any line ;)
-    dG deletes everything until the end of the file
-    tricky one :
-    da{ Deletes Around the braces the cursor is in (first group it finds)
+### 1. Moving Around (Motions)
 
-    You can also step in Insert mode in a lot of different ways
+Return to Normal mode at any time with <kbd>Esc</kbd>.
 
-    i   basic, just insert after the cursor
-    a   inserts before the cursor (sometimes useful)
-    A   inserts at the end of the line
-    o   creates a line underneath and enters insert mode
-    O   creates a line over and enters insert mode
-    
-    ALL OF THAT IS ALREADY A LOT TO TAKE IN
-    you do not have to remember everything, just let it hover somewhere in your mind that a good text editor can do all of this for you so when you feel the need you can look how to proceed (usually when you have been doing the same annoying key combination ten times in a row, there usually is a faster way)
+| Key | Description |
+| :--- | :--- |
+| <kbd>h</kbd> <kbd>j</kbd> <kbd>k</kbd> <kbd>l</kbd> | Move **left**, **down**, **up**, and **right** |
+| <kbd>w</kbd> | Jump to the **start** of the next word |
+| <kbd>e</kbd> | Jump to the **end** of the next word |
+| <kbd>b</kbd> | Jump **backward** to the previous word |
+| <kbd>_</kbd> or <kbd>^</kbd> | Jump to the first non-whitespace character on the line |
+| <kbd>g</kbd><kbd>g</kbd> | Jump to the **very top** of the file |
+| <kbd>G</kbd> | Jump to the **very bottom** of the file |
+| `<N>`<kbd>g</kbd><kbd>g</kbd> | Jump to line `<N>` *(e.g., `21gg` jumps to line 21)* |
 
-    Next there is command mode
+---
 
-    again, commands can do a whole bunch of shit. To enter command mode, press ":" from Normal mode
-    most basic commands are
+### 2. Editing Actions (Operators)
 
-    q   to quit
-    w   to write (save) the file. can take the name of the file as an argument if the file doesn't have a name yet
-    x   to write and quit
-    e   to edit another file (i am in file1.c and I want to go to file2.c without closing/reopening vim/nvim)
+| Key | Action | Double-tap for whole line |
+| :--- | :--- | :--- |
+| <kbd>d</kbd> | **Delete** (cuts text) | <kbd>d</kbd><kbd>d</kbd> → Deletes current line |
+| <kbd>y</kbd> | **Yank** (copies text) | <kbd>y</kbd><kbd>y</kbd> → Copies current line |
+| <kbd>p</kbd> | **Paste** after cursor | — |
+| <kbd>c</kbd> | **Change** (deletes & enters Insert mode) | <kbd>c</kbd><kbd>c</kbd> → Changes current line |
 
-    CONFIG
+---
 
-    vim and neovim are both highly configurable
-    to me, when both are available, HOW they are configurable is what makes me choose neovim
-    vim uses its own scripting language which is said to be clunky by people smarter than me
-    neovim embeds lua which is a very small and easy language (i'd say easier than python)
+### 3. The Magic: Combining Actions + Motions
 
-    vim's config file is ~/.vimrc
-    nvim's config file is ~/.config/nvim/init.lua
-    
-    only thing I have shown you for now is the line numbers
-    
-    in vim you put
-    set number
-    in your .vimrc
+Vim behaves like a language: **`Verb + Motion`**.
 
-    in nvim you put
-    vim.o.number = true
-    in you init.lua
+* `dw` → **D**elete to the next **w**ord
+* `d3gg` → **D**elete everything from current line to line **3**
+* `dG` → **D**elete everything from cursor to the **end of file**
+* `da{` → **D**elete **A**round `{ ... }` *(deletes the entire enclosing block)*
 
-*GDB*
+> [!NOTE]
+> **Do not panic!** You do not need to memorize all of these at once. If you find yourself repeatedly pressing an annoying key sequence, there is almost certainly a 2-key Vim shortcut for it.
 
-    GDB is the Gnu DeBugger
-    It allows us to inspect how the programs we write run
-    
-    to use gdb it is better to compile the code with the -g option
-    fyi you can vary the "detail" of the debuging information with a number
-    -g1
-    -g2
-    -g3
-    I think in gcc, -g  defaults to -g2
-    I have only ever used -g or -g3, never noticed the difference but I know it exists so... yeah
+---
 
-    long story short you compile something like
+### Entering Insert Mode
 
-    gcc -Wall -Wextra -Werror -g3 <filename>
+| Key | How it enters Insert mode |
+| :--- | :--- |
+| <kbd>i</kbd> | **I**nsert *before* the cursor |
+| <kbd>a</kbd> | **A**ppend *after* the cursor |
+| <kbd>A</kbd> | Append at the **end of the line** |
+| <kbd>o</kbd> | Open a new line **below** and insert |
+| <kbd>O</kbd> | Open a new line **above** and insert |
 
-    then you launch gdb with
+---
 
-    gdb --tui <executable name>
-    
-    --tui is important ! it stands for "text user interface" this is the pretty view where we can see the code run line by line. It is old and sometimes breaks/displays gibberish so you have to "refresh" with Ctrl+l
+### Command Mode (`:`)
 
-    gdb has different commands
+Press <kbd>:</kbd> from Normal mode to enter Command mode:
 
-    run starts running the program, if no breakpoint was set it will run almost as if it was just ran from the shell, without giving much useful information, except maybe for a backtrace when crashes (like the scanf one) appears
+| Command | Action |
+| :--- | :--- |
+| `:w` | Write (save) file |
+| `:w <name>` | Save as `<name>` |
+| `:q` | Quit |
+| `:wq` or `:x` | Write and quit |
+| `:q!` | Force quit without saving |
+| `:e <filename>` | Edit another file in the same window |
 
-    break (or simply b) sets breakpoints where gdb will halt the code in the execution.
-    break <the function name where we want to stop and go line by line>
+---
 
-    next (or n) will execute the current line and go to the next line of code
+### Configuration
 
-    step (or s) will step into the current line if it is a function call
-    
-    imagine
-        void    somefunction(void) {
-            logic();
-        }
-        
-        int main()
-        {
-            somefunction();
-            somevariable = 2;
-        }
-    if we are on somefunction, n will just go to the next line while s will go in somefunction's code so we can check more thoroughly
+* **Vim** config file: `~/.vimrc` *(uses Vimscript)*
+* **Neovim** config file: `~/.config/nvim/init.lua` *(uses Lua)*
 
-    print (or p) will print the value of a variable once
-    print <variable name>
-    
-    display (no shorthand I think) will display the value of a variable at each new gdb command, allowing us to track its state
+#### Example: Enabling Line Numbers
+
+**In Vim (`~/.vimrc`):**
+```vim
+set number
