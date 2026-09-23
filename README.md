@@ -180,10 +180,3 @@ int main(void) {
 * If you use **`n` (`next`)**: GDB runs `some_function()` completely and halts at `some_variable = 2;`.
 * If you use **`s` (`step`)**: GDB dives inside `some_function()` so you can debug `logic()` line-by-line.
 ```
-
----
-
-### Why this works well for a beginner:
-1. **Tables for keybindings**: It separates the command from its explanation, making it a functional cheat sheet they can keep open while coding.
-2. **`c`, `lua`, and `vim` blocks**: Syntax highlighting works out of the box in GitHub for all three of these languages.
-3. **Collapsible navigation with Markdown anchors**: The Table of Contents links will jump directly to the relevant heading on GitHub.
