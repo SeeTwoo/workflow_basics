@@ -179,4 +179,3 @@ int main(void) {
 
 * If you use **`n` (`next`)**: GDB runs `some_function()` completely and halts at `some_variable = 2;`.
 * If you use **`s` (`step`)**: GDB dives inside `some_function()` so you can debug `logic()` line-by-line.
-```
