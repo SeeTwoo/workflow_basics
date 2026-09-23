@@ -1,16 +1,3 @@
-Yes, GitHub Markdown can look fantastic if you take advantage of a few features:
-* **Fenced code blocks with language tags** (```` ```c ````, ```` ```bash ````, ```` ```lua ````) will give you full syntax highlighting.
-* **`<kbd>` tags** (e.g., `<kbd>Esc</kbd>`) style keystrokes to look like physical keyboard keys.
-* **Tables** make reference sheets and shortcut lists much cleaner to scan than bullet points.
-* **GitHub Callouts** (`> [!TIP]`, `> [!NOTE]`) create colorful, styled highlight boxes.
-
-*(Note: In your draft, you had `i` and `a` swapped—in Vim, `i` stands for **I**nsert **before** the cursor, while `a` stands for **A**ppend **after** the cursor. I corrected that below!)*
-
-Here is a ready-to-copy version for your `README.md`:
-
----
-
-```markdown
 # 🛠️ Workflow Basics: Neovim & GDB
 
 A quick reference guide for editing with **(Neo)vim** and debugging with **GDB**.
