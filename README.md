@@ -112,3 +112,45 @@ Press <kbd>:</kbd> from Normal mode to enter Command mode:
 **In Vim (`~/.vimrc`):**
 ```vim
 set number
+In Neovim (~/.config/nvim/init.lua):
+code
+Lua
+vim.o.number = true
+🐞 GDB (GNU Debugger)
+GDB lets you run a program line-by-line, inspect memory, and see exactly where and why crashes occur.
+1. Compiling for Debugging
+Add the -g flag to embed debug symbols. Using -g3 includes maximum detail:
+code
+Bash
+gcc -Wall -Wextra -Werror -g3 main.c -o program
+2. Launching GDB
+Launch GDB with the TUI (Text User Interface), which displays your code in a split terminal window:
+code
+Bash
+gdb --tui ./program
+lightbulb
+The TUI mode can sometimes glitch out visually when programs output text. Press <kbd>Ctrl</kbd> + <kbd>L</kbd> to redraw and refresh the screen.
+3. Essential Commands
+Command	Shorthand	Description
+run	r	Start the program from the beginning
+break <func/line>	b <func/line>	Set a breakpoint (e.g., b main, b 15)
+next	n	Run next line of code (skips over function calls)
+step	s	Run next line of code (steps into function calls)
+print <var>	p <var>	Print the current value of a variable once
+display <var>	display <var>	Continuously show <var> after every step
+continue	c	Continue running until the next breakpoint
+quit	q	Exit GDB
+step vs next Example
+code
+C
+void some_function(void) {
+    logic();
+}
+
+int main(void) {
+    some_function();  // <-- Cursor is stopped here
+    some_variable = 2;
+    return 0;
+}
+If you use n (next): GDB runs some_function() completely and halts at some_variable = 2;.
+If you use s (step): GDB dives inside some_function() so you can debug logic() line-by-line.
