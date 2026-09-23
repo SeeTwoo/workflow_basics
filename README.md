@@ -1,3 +1,16 @@
+Yes, GitHub Markdown can look fantastic if you take advantage of a few features:
+* **Fenced code blocks with language tags** (```` ```c ````, ```` ```bash ````, ```` ```lua ````) will give you full syntax highlighting.
+* **`<kbd>` tags** (e.g., `<kbd>Esc</kbd>`) style keystrokes to look like physical keyboard keys.
+* **Tables** make reference sheets and shortcut lists much cleaner to scan than bullet points.
+* **GitHub Callouts** (`> [!TIP]`, `> [!NOTE]`) create colorful, styled highlight boxes.
+
+*(Note: In your draft, you had `i` and `a` swapped—in Vim, `i` stands for **I**nsert **before** the cursor, while `a` stands for **A**ppend **after** the cursor. I corrected that below!)*
+
+Here is a ready-to-copy version for your `README.md`:
+
+---
+
+```markdown
 # 🛠️ Workflow Basics: Neovim & GDB
 
 A quick reference guide for editing with **(Neo)vim** and debugging with **GDB**.
@@ -112,37 +125,60 @@ Press <kbd>:</kbd> from Normal mode to enter Command mode:
 **In Vim (`~/.vimrc`):**
 ```vim
 set number
-In Neovim (~/.config/nvim/init.lua):
-code
-Lua
+```
+
+**In Neovim (`~/.config/nvim/init.lua`):**
+```lua
 vim.o.number = true
-🐞 GDB (GNU Debugger)
+```
+
+---
+
+## 🐞 GDB (GNU Debugger)
+
 GDB lets you run a program line-by-line, inspect memory, and see exactly where and why crashes occur.
-1. Compiling for Debugging
-Add the -g flag to embed debug symbols. Using -g3 includes maximum detail:
-code
-Bash
+
+### 1. Compiling for Debugging
+
+Add the `-g` flag to embed debug symbols. Using `-g3` includes maximum detail:
+
+```bash
 gcc -Wall -Wextra -Werror -g3 main.c -o program
-2. Launching GDB
-Launch GDB with the TUI (Text User Interface), which displays your code in a split terminal window:
-code
-Bash
+```
+
+---
+
+### 2. Launching GDB
+
+Launch GDB with the TUI (**Text User Interface**), which displays your code in a split terminal window:
+
+```bash
 gdb --tui ./program
-lightbulb
-The TUI mode can sometimes glitch out visually when programs output text. Press <kbd>Ctrl</kbd> + <kbd>L</kbd> to redraw and refresh the screen.
-3. Essential Commands
-Command	Shorthand	Description
-run	r	Start the program from the beginning
-break <func/line>	b <func/line>	Set a breakpoint (e.g., b main, b 15)
-next	n	Run next line of code (skips over function calls)
-step	s	Run next line of code (steps into function calls)
-print <var>	p <var>	Print the current value of a variable once
-display <var>	display <var>	Continuously show <var> after every step
-continue	c	Continue running until the next breakpoint
-quit	q	Exit GDB
-step vs next Example
-code
-C
+```
+
+> [!TIP]
+> The TUI mode can sometimes glitch out visually when programs output text. Press **<kbd>Ctrl</kbd> + <kbd>L</kbd>** to redraw and refresh the screen.
+
+---
+
+### 3. Essential Commands
+
+| Command | Shorthand | Description |
+| :--- | :--- | :--- |
+| `run` | `r` | Start the program from the beginning |
+| `break <func/line>` | `b <func/line>` | Set a breakpoint *(e.g., `b main`, `b 15`)* |
+| `next` | `n` | Run next line of code (**skips over** function calls) |
+| `step` | `s` | Run next line of code (**steps into** function calls) |
+| `print <var>` | `p <var>` | Print the current value of a variable once |
+| `display <var>` | `display <var>` | Continuously show `<var>` after every step |
+| `continue` | `c` | Continue running until the next breakpoint |
+| `quit` | `q` | Exit GDB |
+
+---
+
+### `step` vs `next` Example
+
+```c
 void some_function(void) {
     logic();
 }
@@ -152,5 +188,15 @@ int main(void) {
     some_variable = 2;
     return 0;
 }
-If you use n (next): GDB runs some_function() completely and halts at some_variable = 2;.
-If you use s (step): GDB dives inside some_function() so you can debug logic() line-by-line.
+```
+
+* If you use **`n` (`next`)**: GDB runs `some_function()` completely and halts at `some_variable = 2;`.
+* If you use **`s` (`step`)**: GDB dives inside `some_function()` so you can debug `logic()` line-by-line.
+```
+
+---
+
+### Why this works well for a beginner:
+1. **Tables for keybindings**: It separates the command from its explanation, making it a functional cheat sheet they can keep open while coding.
+2. **`c`, `lua`, and `vim` blocks**: Syntax highlighting works out of the box in GitHub for all three of these languages.
+3. **Collapsible navigation with Markdown anchors**: The Table of Contents links will jump directly to the relevant heading on GitHub.
